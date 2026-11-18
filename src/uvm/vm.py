@@ -26,6 +26,7 @@ class Machine:
     """Состояние УВМ: память команд, память данных, регистры, pc."""
 
     def __init__(self, code: bytes) -> None:
+        """Создаёт УВМ: память команд из code, память данных из нулей."""
         self.code = code
         self.data: List[int] = [0] * DATA_MEMORY_SIZE
         self.registers: List[int] = [0] * REGISTER_COUNT
