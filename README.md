@@ -57,3 +57,27 @@ PYTHONPATH=src python -m uvm.asm_cli examples/spec_tests.csv out/spec.bin --test
 0x29, 0x66, 0x00, 0x00, 0xC0, 0x02
 ```
 
+## Интерпретатор
+Модель УВМ: память команд (байты бинарного файла) и память данных
+(65536 ячеек) **разделены**; есть 128 регистров. Реализованы команды
+`load`, `read` и `write`.
+
+Запуск:
+
+```bash
+PYTHONPATH=src python -m uvm.interp_cli out/copy.bin out/dump.csv 10 24
+```
+
+Аргументы: бинарная программа, файл дампа (CSV), первый и последний
+адреса дампа (границы включены). Формат дампа: заголовок
+`address,value`, затем строки `адрес,значение`.
+
+## Пример: копирование массива
+Программа `examples/copy_array.csv` записывает числа 11, 22, 33, 44, 55
+по адресам 10–14 и копирует их на адреса 20–24:
+
+```bash
+PYTHONPATH=src python -m uvm.asm_cli examples/copy_array.csv out/copy.bin
+PYTHONPATH=src python -m uvm.interp_cli out/copy.bin out/copy_dump.csv 10 24
+cat out/copy_dump.csv
+```
