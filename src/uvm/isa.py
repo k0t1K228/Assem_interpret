@@ -14,6 +14,11 @@ OPCODE_WIDTH = 5
 BYTE_ORDER = "little"
 
 
+def bit_mask(width: int) -> int:
+    """Возвращает маску из width единичных младших бит."""
+    return (1 << width) - 1
+
+
 @dataclass(frozen=True)
 class Field:
     """Битовое поле команды."""
@@ -21,6 +26,7 @@ class Field:
     name: str
     offset: int
     width: int
+    signed: bool = False
 
 
 @dataclass(frozen=True)
@@ -36,7 +42,7 @@ class CommandSpec:
 COMMANDS = (
     CommandSpec(
         "load", 29, 4,
-        (Field("B", 5, 7), Field("C", 12, 18)),
+        (Field("B", 5, 7), Field("C", 12, 18, signed=True)),
     ),
     CommandSpec(
         "read", 16, 4,

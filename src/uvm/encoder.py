@@ -3,14 +3,15 @@
 from typing import List
 
 from uvm.assembler import Instruction
-from uvm.isa import BYTE_ORDER, OPCODE_NAME, OPCODE_OFFSET
+from uvm.isa import BYTE_ORDER, OPCODE_NAME, OPCODE_OFFSET, bit_mask
 
 
 def encode_instruction(instr: Instruction) -> bytes:
     """Собирает поля команды в число и переводит его в байты."""
     value = instr.fields[OPCODE_NAME] << OPCODE_OFFSET
     for field in instr.spec.operands:
-        value |= instr.fields[field.name] << field.offset
+        raw = instr.fields[field.name] & bit_mask(field.width)
+        value |= raw << field.offset
     return value.to_bytes(instr.spec.size, BYTE_ORDER)
 
 

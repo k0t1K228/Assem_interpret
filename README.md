@@ -17,7 +17,7 @@
 
 | Команда | Операнды | Описание |
 |---|---|---|
-| `load` | B, C | регистр B ← константа C |
+| `load` | B, C | регистр B ← знаковая константа C (−131072…131071) |
 | `read` | B, C, D | регистр D ← память[регистр B + смещение C] |
 | `write` | B, C, D | память[регистр B + смещение D] ← регистр C |
 | `abs` | B, C | регистр C ← abs(память[адрес B]) |
@@ -80,4 +80,18 @@ PYTHONPATH=src python -m uvm.interp_cli out/copy.bin out/dump.csv 10 24
 PYTHONPATH=src python -m uvm.asm_cli examples/copy_array.csv out/copy.bin
 PYTHONPATH=src python -m uvm.interp_cli out/copy.bin out/copy_dump.csv 10 24
 cat out/copy_dump.csv
+```
+
+## АЛУ: команда abs
+Команда `abs,B,C` читает ячейку памяти данных по адресу B, берёт её
+модуль и кладёт в регистр C. Чтобы в памяти можно было получить
+отрицательные числа, константа `load` знаковая.
+
+Пример `examples/abs_demo.csv`: числа -7, 25, -1000 по адресам 30–32,
+их модули записываются по адресам 40–42:
+
+```bash
+PYTHONPATH=src python -m uvm.asm_cli examples/abs_demo.csv out/abs.bin
+PYTHONPATH=src python -m uvm.interp_cli out/abs.bin out/abs_dump.csv 30 42
+cat out/abs_dump.csv
 ```

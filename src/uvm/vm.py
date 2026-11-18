@@ -73,10 +73,17 @@ def op_write(machine: Machine, fields: Dict[str, int]) -> None:
     machine.write_data(address, machine.registers[fields["C"]])
 
 
+def op_abs(machine: Machine, fields: Dict[str, int]) -> None:
+    """Регистр C <- abs(память[адрес B])."""
+    value = machine.read_data(fields["B"])
+    machine.registers[fields["C"]] = abs(value)
+
+
 OPERATIONS: Dict[str, Callable[[Machine, Dict[str, int]], None]] = {
     "load": op_load,
     "read": op_read,
     "write": op_write,
+    "abs": op_abs,
 }
 
 

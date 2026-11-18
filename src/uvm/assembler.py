@@ -2,7 +2,7 @@
 
 import csv
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from uvm.isa import BY_MNEMONIC, OPCODE_NAME, CommandSpec, Field
 
@@ -28,17 +28,25 @@ def format_instruction(instr: Instruction) -> str:
     return ", ".join(f"{k}={v}" for k, v in instr.fields.items())
 
 
+def value_range(field: Field) -> Tuple[int, int]:
+    """Допустимый диапазон значений поля (знаковый или беззнаковый)."""
+    if field.signed:
+        half = 1 << (field.width - 1)
+        return -half, half - 1
+    return MIN_VALUE, (1 << field.width) - 1
+
+
 def parse_operand(field: Field, text: str) -> int:
     """Преобразует текст операнда в число и проверяет диапазон поля."""
     try:
         value = int(text, AUTO_BASE)
     except ValueError:
         raise AsmError(f"'{text}' не является числом") from None
-    max_value = (1 << field.width) - 1
-    if not MIN_VALUE <= value <= max_value:
+    low, high = value_range(field)
+    if not low <= value <= high:
         raise AsmError(
             f"значение {value} вне диапазона поля {field.name} "
-            f"({MIN_VALUE}..{max_value})"
+            f"({low}..{high})"
         )
     return value
 

@@ -4,17 +4,16 @@ from uvm.assembler import Instruction
 from uvm.errors import DecodeError
 from uvm.isa import (
     BY_OPCODE, BYTE_ORDER, OPCODE_NAME, OPCODE_OFFSET, OPCODE_WIDTH, Field,
+    bit_mask,
 )
 
 
-def bit_mask(width: int) -> int:
-    """Возвращает маску из width единичных младших бит."""
-    return (1 << width) - 1
-
-
 def extract_field(value: int, field: Field) -> int:
-    """Достаёт значение поля из числа, собранного из байтов команды."""
-    return (value >> field.offset) & bit_mask(field.width)
+    """Достаёт поле из числа команды; знаковое поле расширяет знаком."""
+    raw = (value >> field.offset) & bit_mask(field.width)
+    if field.signed and raw >> (field.width - 1):
+        raw -= 1 << field.width
+    return raw
 
 
 def decode_instruction(code: bytes, pc: int) -> Instruction:
