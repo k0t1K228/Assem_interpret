@@ -10,6 +10,8 @@ from typing import Dict, Tuple
 OPCODE_NAME = "A"
 OPCODE_OFFSET = 0
 OPCODE_WIDTH = 5
+OPCODE_WIDTH = 5
+BYTE_ORDER = "little"
 
 
 @dataclass(frozen=True)
