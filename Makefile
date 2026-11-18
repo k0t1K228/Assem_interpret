@@ -1,2 +1,2 @@
 test:
-	python -m unittest discover -s tests -t .
+	PYTHONPATH=src python -m unittest discover -s tests -t . -v
