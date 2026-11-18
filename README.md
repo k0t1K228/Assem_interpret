@@ -95,3 +95,37 @@ PYTHONPATH=src python -m uvm.asm_cli examples/abs_demo.csv out/abs.bin
 PYTHONPATH=src python -m uvm.interp_cli out/abs.bin out/abs_dump.csv 30 42
 cat out/abs_dump.csv
 ```
+
+## Тестовая задача: abs() над вектором длины 8
+Программа записывает исходный вектор по адресам 10–17 и записывает
+`abs()` каждого элемента в **новый** вектор по адресам 20–27.
+Программы генерируются скриптом `scripts/gen_vector_abs.py`
+(8 чисел → CSV-программа), готовые лежат в `examples/`:
+
+| Файл | Данные |
+|---|---|
+| `vector_abs.csv` | -5 12 -300 0 77 -1 100000 -131072 |
+| `vector_abs_negative.csv` | только отрицательные |
+| `vector_abs_positive.csv` | только неотрицательные |
+| `vector_abs_limits.csv` | граничные значения константы |
+
+Новая программа:
+
+```bash
+python scripts/gen_vector_abs.py examples/my.csv 1 -2 3 -4 5 -6 7 -8
+```
+
+Запуск всех примеров и просмотр дампа:
+
+```bash
+for name in vector_abs vector_abs_negative vector_abs_positive \
+    vector_abs_limits; do
+  PYTHONPATH=src python -m uvm.asm_cli examples/$name.csv out/$name.bin
+  PYTHONPATH=src python -m uvm.interp_cli out/$name.bin \
+      out/$name.dump.csv 10 27
+done
+column -s, -t out/vector_abs.dump.csv
+```
+
+В дампе адреса 10–17 содержат исходный вектор, 18–19 пусты, а
+20–27 содержат результат `abs()`.

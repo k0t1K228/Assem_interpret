@@ -1,0 +1,35 @@
+# Вектор из 8 чисел по адресам 10..
+# abs() каждого элемента -> новый вектор по адресам 20..
+load,0,0
+load,1,3
+write,0,1,10
+load,1,0
+write,0,1,11
+load,1,14
+write,0,1,12
+load,1,15
+write,0,1,13
+load,1,92
+write,0,1,14
+load,1,65
+write,0,1,15
+load,1,35
+write,0,1,16
+load,1,89
+write,0,1,17
+abs,10,2
+write,0,2,20
+abs,11,2
+write,0,2,21
+abs,12,2
+write,0,2,22
+abs,13,2
+write,0,2,23
+abs,14,2
+write,0,2,24
+abs,15,2
+write,0,2,25
+abs,16,2
+write,0,2,26
+abs,17,2
+write,0,2,27
